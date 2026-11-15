@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExcelPro – Learn Excel</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--ink:#1b2a22;--mut:#5d6e65;--g:#217346;--g2:#e1f1e8;--line:#d7e1db;--bad:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f1512;--card:#17201b;--ink:#e8f0ec;--mut:#9db0a6;--g:#3fbf7f;--g2:#1b2d24;--line:#2a3a31;--bad:#ff7b6b}}
+:root[data-theme="dark"]{--bg:#0f1512;--card:#17201b;--ink:#e8f0ec;--mut:#9db0a6;--g:#3fbf7f;--g2:#1b2d24;--line:#2a3a31;--bad:#ff7b6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+h1{font-size:28px;margin:8px 0 4px}h2{font-size:21px;margin:6px 0}p{margin:6px 0}
+.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;width:100%;text-align:left;color:inherit;font:inherit}
+button.card{cursor:pointer}button.card:active{transform:scale(.99)}
+.row{display:flex;align-items:center;gap:12px}.em{font-size:34px}.grow{flex:1}
+.bar{height:8px;border-radius:6px;background:var(--g2);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--g)}
+.btn{background:var(--g);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:transparent;color:var(--g);border:1px solid var(--g)}
+.back{background:none;border:0;color:var(--g);font:inherit;font-weight:600;padding:8px 0;cursor:pointer}
+code,.fx{font-family:ui-monospace,Menlo,Consolas,monospace}
+.fx{display:block;background:var(--g2);border-left:4px solid var(--g);padding:10px 12px;border-radius:8px;margin:10px 0;overflow-x:auto;white-space:pre}
+.g{overflow-x:auto;margin:10px 0}table{border-collapse:collapse;font-size:14px;min-width:60%}
+th,td{border:1px solid var(--line);padding:4px 10px;text-align:left}th{background:var(--g2);color:var(--mut);font-weight:600;text-align:center}td.hd{font-weight:700}
+.tip{background:var(--g2);border-radius:12px;padding:10px 12px;margin:10px 0;font-size:15px}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.opt.ok{border-color:var(--g);background:var(--g2)}.opt.no{border-color:var(--bad)}
+input[type=text]{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:16px ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
+.fb{margin:10px 0;font-weight:600}.fb.ok{color:var(--g)}.fb.no{color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.pill{font-size:12px;background:var(--g2);color:var(--g);border-radius:99px;padding:2px 10px;font-weight:700}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+"use strict";
+const $=s=>document.querySelector(s),app=$("#app");
+const MC=(q,o)=>({t:"mc",q,o}),FQ=(q,ok)=>({t:"f",q,ok});
+const D={
+beginner:{n:"Beginner",e:"🌱",d:"Solid foundations: references, core functions, percentages and tables.",L:[
+ {t:"Cells, ranges & references",s:"Every cell has an address such as B2, and a range such as B2:B6 groups cells. A $ locks a reference so it doesn’t move when you copy the formula.",f:"=B2*$E$1",x:"Copied down, B2 becomes B3, B4… but $E$1 (say, a tax rate) stays fixed.",p:"F4 cycles through $B$2, B$2, $B2 and B2. Ctrl+Arrow jumps to the edge of your data.",tb:[["Item","Price","Qty","Total"],["Pen",2,10,""],["Book",5,4,""],["Bag",20,2,""]],q:[MC("You copy =B2*$E$1 down. Which part stays fixed?",["$E$1","B2","Both"]),FQ("Type the formula for D2: price × quantity.",["B2*C2","C2*B2"])]},
+ {t:"SUM, AVERAGE, MIN, MAX, COUNT",s:"The core five summarise a range in one step. COUNT counts numbers only; COUNTA counts anything non-empty.",f:"=SUM(B2:B6)\n=AVERAGE(B2:B6)",x:"Select the range and press Alt+= to insert an AutoSum instantly.",p:"The status bar shows sum, average and count of any selection, with no formula needed.",tb:[["Month","Sales"],["Jan",1200],["Feb",950],["Mar",1430],["Apr",1100],["May",1620]],q:[FQ("Type the formula for the total of B2:B6.",["SUM(B2:B6)"]),MC("Which counts only cells that contain numbers?",["COUNT","COUNTA","LEN"])]},
+ {t:"Percentages & growth",s:"Percent change is (new − old) ÷ old. To add a percentage, multiply by 1 + rate. Format the result as % with Ctrl+Shift+5.",f:"=(B3-B2)/B2\n=B2*(1+15%)",x:"Always divide by the old value when measuring growth.",p:"Store rates (VAT, margin) in their own cell and lock them with $.",tb:[["Year","Revenue"],["2025",80],["2026",100]],q:[MC("Revenue rose from 80 to 100. Which gives growth %?",["=(B3-B2)/B2","=B3/B2","=B2/B3"]),FQ("B2 holds 200. Type a formula that adds 15% VAT.",["B2*1.15","B2*(1+15%)","B2*(1+0.15)","B2+B2*15%","B2+B2*0.15"])]},
+ {t:"Tables, sort & filter",s:"Turn a range into a Table to get auto-expanding formulas, banded rows, filters and structured references.",f:"Ctrl+T  → make a Table\nCtrl+Shift+L  → toggle filters",x:"Formulas in a Table fill down automatically and grow with new rows.",p:"Freeze headers: View → Freeze Panes. Use Ctrl+; to stamp today’s date.",tb:null,q:[MC("Which shortcut turns a range into a Table?",["Ctrl+T","Ctrl+Shift+L","Alt+="]),MC("What does Alt+= do?",["Inserts AutoSum","Freezes panes","Opens Find"])]}
+]},
+intermediate:{n:"Intermediate",e:"🚀",d:"Daily analyst toolkit: logic, conditional sums, lookups, text and PivotTables.",L:[
+ {t:"IF, IFS, AND, OR",s:"IF returns one value when a test is true and another when false. Combine tests with AND (all true) or OR (any true).",f:"=IF(B2>=50,\"Pass\",\"Fail\")\n=IF(AND(B2>=50,C2=\"Y\"),\"OK\",\"Review\")",x:"Text in formulas goes in double quotes. IFS avoids deeply nested IFs.",p:"Nest no more than 2 levels; switch to IFS, XLOOKUP or SWITCH beyond that.",tb:[["Name","Score"],["Aina",72],["Raj",45],["Mei",88]],q:[FQ("Type: “Pass” if B2 is 50 or more, otherwise “Fail”.",["IF(B2>=50,\"PASS\",\"FAIL\")"]),MC("Which returns TRUE only if both conditions are true?",["AND","OR","NOT"])]},
+ {t:"SUMIFS & COUNTIFS",s:"Add or count only the rows that meet criteria. SUMIFS takes the sum range first, then pairs of criteria range and criteria.",f:"=SUMIFS(C2:C7,A2:A7,\"North\",B2:B7,\"A\")",x:"All ranges must be the same size. Use \">=\"&E1 to build criteria from cells.",p:"AVERAGEIFS and MAXIFS follow the same pattern.",tb:[["Region","Product","Sales"],["North","A",500],["South","B",300],["North","B",450],["East","A",200],["North","A",350],["South","A",400]],q:[FQ("Total Sales (C2:C7) where Region (A2:A7) is North.",["SUMIF(A2:A7,\"NORTH\",C2:C7)","SUMIFS(C2:C7,A2:A7,\"NORTH\")"]),MC("In SUMIFS, which argument comes first?",["The range to sum","The criteria","The first criteria range"])]},
+ {t:"XLOOKUP, VLOOKUP & INDEX-MATCH",s:"Lookups fetch a value from another table by a key. XLOOKUP looks in any direction and defaults to an exact match.",f:"=XLOOKUP(E2,A2:A4,B2:B4,\"Not found\")\n=INDEX(B2:B4,MATCH(E2,A2:A4,0))",x:"VLOOKUP breaks when columns are inserted and only looks right. Prefer XLOOKUP or INDEX-MATCH.",p:"Always use exact match (FALSE or 0) for IDs.",tb:[["ID","Name","Dept"],[101,"Aina","HR"],[102,"Raj","IT"],[103,"Mei","Ops"]],q:[FQ("ID is in E2. Return the Name with XLOOKUP.",["XLOOKUP(E2,A2:A4,B2:B4)"]),MC("VLOOKUP’s last argument FALSE means…",["Exact match","Approximate match","Ignore errors"])]},
+ {t:"Text & date functions",s:"Clean and reshape text with LEFT, MID, RIGHT, TRIM, TEXTJOIN. Date maths uses EOMONTH, EDATE and NETWORKDAYS.",f:"=LEFT(A2,2)\n=TEXTJOIN(\", \",TRUE,A2:A4)\n=NETWORKDAYS(B2,C2)",x:"Dates are serial numbers, so end − start gives days.",p:"Flash Fill (Ctrl+E) splits and joins text by example.",tb:[["Code"],["MY-001"],["SG-002"]],q:[FQ("Return the first 2 characters of A2.",["LEFT(A2,2)"]),MC("Which removes extra spaces from text?",["TRIM","CLEAN","PROPER"])]},
+ {t:"PivotTables & data tools",s:"A PivotTable summarises thousands of rows in seconds. Drag fields into Rows, Columns, Values and Filters; refresh after the data changes.",f:"Insert → PivotTable (Alt+N+V)",x:"Add Slicers for one-click filtering and group dates by month or year.",p:"Use Data Validation for dropdowns and Conditional Formatting for instant visual flags.",tb:null,q:[MC("In a PivotTable, where do you drop the field you want to total?",["Values","Filters","Rows"]),MC("Which feature restricts a cell to a dropdown list?",["Data Validation","Conditional Formatting","Goal Seek"])]}
+]},
+advanced:{n:"Advanced",e:"🏆",d:"Modern Excel: dynamic arrays, LET/LAMBDA, SUMPRODUCT, Power tools and automation.",L:[
+ {t:"Dynamic arrays",s:"One formula can spill many results. FILTER, SORT, UNIQUE and SEQUENCE replace helper columns and manual copying.",f:"=FILTER(A2:C4,C2:C4>1000)\n=SORT(UNIQUE(B2:B4))",x:"Reference a whole spill with the # operator, e.g. E2#.",p:"Needs Microsoft 365 or Excel 2021+. A #SPILL! error means something blocks the output range.",tb:[["Item","Dept","Cost"],["Laptop","IT",3200],["Desk","Ops",800],["Server","IT",9000]],q:[FQ("Return rows A2:C4 where Cost (C2:C4) is above 1000.",["FILTER(A2:C4,C2:C4>1000)"]),MC("Which function returns distinct values?",["UNIQUE","SORT","SEQUENCE"])]},
+ {t:"LET & LAMBDA",s:"LET names intermediate calculations so they’re written once and read easily. LAMBDA turns a formula into a reusable custom function.",f:"=LET(net,B2*0.9,net+net*6%)\n=LAMBDA(x,x*1.06)",x:"Save a LAMBDA in Name Manager to call it like any built-in function.",p:"LET makes long formulas faster and far easier to audit.",tb:null,q:[MC("Why use LET?",["Name a calculation once and reuse it","Lock a sheet","Import data"]),MC("LAMBDA lets you…",["Create your own reusable function","Draw charts","Merge cells"])]},
+ {t:"SUMPRODUCT & array logic",s:"SUMPRODUCT multiplies arrays element by element and adds the results. Combine conditions with * (AND) and + (OR).",f:"=SUMPRODUCT(B2:B4,C2:C4)\n=SUMPRODUCT((A2:A9=\"North\")*C2:C9)",x:"It evaluates arrays natively, with no Ctrl+Shift+Enter needed.",p:"Great for weighted averages: SUMPRODUCT(weights,values)/SUM(weights).",tb:[["Item","Price","Qty"],["Pen",2,10],["Book",5,4],["Bag",20,2]],q:[FQ("One formula for total revenue (price × qty) from B2:B4 and C2:C4.",["SUMPRODUCT(B2:B4,C2:C4)","SUMPRODUCT(B2:B4*C2:C4)"]),MC("SUMPRODUCT can…",["Multiply arrays and add the results","Only sum one column","Create a PivotTable"])]},
+ {t:"Power Query & Power Pivot",s:"Power Query cleans, merges and reshapes data with repeatable, refreshable steps. Power Pivot builds a Data Model with relationships and DAX measures.",f:"Data → Get Data → From File/Folder\nMeasure: Total Sales := SUM(Sales[Amount])",x:"Load to the Data Model, then build PivotTables across many related tables.",p:"If you copy-paste the same cleanup monthly, it belongs in Power Query.",tb:null,q:[MC("Best tool to clean and refresh many CSV files repeatedly?",["Power Query","VLOOKUP","Flash Fill"]),MC("Where do DAX measures live?",["The Data Model (Power Pivot)","Conditional formatting","Cell comments"])]},
+ {t:"Error handling & automation",s:"IFERROR keeps reports clean. Macros, VBA and Office Scripts automate repetitive work; the Macro Recorder is the fastest start.",f:"=IFERROR(A2/B2,0)\nView → Macros → Record Macro",x:"Trap only expected errors. IFNA is safer for lookups because it hides #N/A only.",p:"Build dashboards from PivotTables, slicers and charts, then refresh in one click.",tb:[["Revenue","Units"],[500,0],[300,5]],q:[FQ("Return 0 if A2/B2 gives an error.",["IFERROR(A2/B2,0)"]),MC("To automate repetitive steps without writing code, use…",["The Macro Recorder","Spell check","Freeze Panes"])]}
+]}};
+
+D.beginner.L.push(
+ {t:"Formatting & printing",s:"Good formatting makes numbers readable. Ctrl+1 opens Format Cells for number, date and currency formats; Page Layout controls print areas and titles.",f:"Ctrl+1  → Format Cells\nPage Layout → Print Titles",x:"Format, don’t type: keep 0.15 as a number and show it as 15%.",p:"Ctrl+Shift+4 applies currency, Ctrl+Shift+1 a number with separators, Ctrl+Shift+3 a date.",tb:null,q:[MC("Which shortcut opens Format Cells?",["Ctrl+1","Ctrl+F","Ctrl+K"]),MC("Best way to show 0.15 as 15%?",["Apply the Percentage format","Type “15%” as text","Multiply by 100 in a formula"])]},
+ {t:"Charts in 60 seconds",s:"Select your data and press Alt+F1 for an instant chart. Match the chart to the question: line for trends, column for comparisons, pie only for a few parts of a whole.",f:"Alt+F1  → chart on the sheet\nF11  → chart on its own sheet",x:"Keep titles short and remove clutter such as heavy gridlines.",p:"Right-click a chart → Save as Template to reuse your style.",tb:null,q:[MC("Which chart best shows a trend over time?",["Line","Pie","Radar"]),MC("Which shortcut inserts a quick chart from selected data?",["Alt+F1","Ctrl+Shift+C","F5"])]}
+);
+D.intermediate.L.push(
+ {t:"Clean & consolidate data",s:"Messy exports waste hours. Use Remove Duplicates, Text to Columns, TRIM and Flash Fill to standardise data before analysis.",f:"Data → Remove Duplicates\nData → Text to Columns\nCtrl+E  → Flash Fill",x:"Keep a raw copy on its own sheet and clean a duplicate.",p:"F5 → Special finds blanks, errors and constants fast.",tb:null,q:[MC("Which feature splits one column into several?",["Text to Columns","Remove Duplicates","Freeze Panes"]),FQ("Remove leading and trailing spaces from A2.",["TRIM(A2)"])]},
+ {t:"IFS, SWITCH & error handling",s:"IFS tests many conditions in order without nesting. SWITCH maps exact values to results. IFERROR and IFNA keep reports free of ugly errors.",f:"=IFS(B2>=80,\"A\",B2>=60,\"B\",TRUE,\"C\")\n=IFERROR(A2,\"None\")",x:"IFS returns the first TRUE, so finish with TRUE as the catch-all.",p:"Prefer IFNA around lookups so genuine errors are not hidden.",tb:[["Score"],[85],[62],[40]],q:[FQ("Show “None” if A2 has an error.",["IFERROR(A2,\"NONE\")","IFNA(A2,\"NONE\")"]),MC("Which tests several conditions without nesting?",["IFS","SUMIF","LEFT"])]}
+);
+D.advanced.L.push(
+ {t:"Two-way lookups with INDEX/MATCH",s:"INDEX returns a value at a row and column; MATCH finds a position. Together they power two-way lookups across a grid.",f:"=INDEX(B2:D4,MATCH(F1,A2:A4,0),MATCH(F2,B1:D1,0))",x:"The first MATCH finds the row, the second finds the column.",p:"XLOOKUP can be nested to do the same: XLOOKUP(F1,A2:A4,XLOOKUP(F2,B1:D1,B2:D4)).",tb:[["Region","Q1","Q2","Q3"],["North",100,120,140],["South",90,95,110],["East",70,85,60]],q:[FQ("Find the exact-match row position of E1 in A2:A4.",["MATCH(E1,A2:A4,0)"]),MC("INDEX(B2:D4,2,3) returns the value from…",["Row 2, column 3 of the range","Cell B2","Row 3, column 2"])]},
+ {t:"What-if analysis",s:"Goal Seek finds the input that gives a target result. Scenario Manager stores sets of inputs. Data Tables show results across a range of inputs.",f:"Data → What-If Analysis → Goal Seek\nData → What-If Analysis → Data Table",x:"Keep inputs in separate, labelled cells so every scenario is traceable.",p:"A two-variable Data Table is the quickest sensitivity grid for a model.",tb:null,q:[MC("Which tool finds the input needed to hit a target?",["Goal Seek","Remove Duplicates","Flash Fill"]),MC("A two-variable Data Table shows…",["Output across two changing inputs","Duplicate rows","Sheet protection"])]}
+);
+D.beginner.I={
+ fin:[{t:"Rounding & loan payments",s:"ROUND controls precision in reports. PMT calculates a loan’s regular payment from rate, number of periods and amount.",f:"=ROUND(B2,-2)\n=PMT(B2/12,B3*12,-B4)",x:"Use the same unit for rate and periods: a monthly rate with monthly periods.",p:"Enter the loan as negative inside PMT so the payment shows as positive.",tb:[["Item","Value"],["Annual rate",0.06],["Years",5],["Loan",50000]],q:[FQ("Monthly payment: annual rate in B2, years in B3, loan in B4.",["PMT(B2/12,B3*12,-B4)"]),MC("Which rounds a value to the nearest hundred?",["ROUND(x,-2)","ROUND(x,2)","INT(x)"])]}],
+ hr:[{t:"Headcount & dates",s:"COUNTIF counts employees by department, status or location. TODAY returns the current date and updates every day.",f:"=COUNTIF(B2:B6,\"HR\")\n=TODAY()",x:"Criteria ignore case and need quotes for text.",p:"Ctrl+; enters today’s date as a fixed value.",tb:[["Name","Dept"],["Aina","HR"],["Raj","IT"],["Mei","HR"],["Lim","Ops"],["Siti","IT"]],q:[FQ("Count employees in B2:B6 whose Dept is HR.",["COUNTIF(B2:B6,\"HR\")"]),MC("TODAY() returns…",["The current date","The current time only","A fixed date"])]}],
+ ops:[{t:"Stock alerts",s:"Use IF with comparison operators to flag low stock. MIN and MAX quickly show the smallest and largest quantities.",f:"=IF(B2<C2,\"Reorder\",\"OK\")",x:"Comparison operators: <, >, <=, >=, = and <>.",p:"Add Conditional Formatting so “Reorder” turns red automatically.",tb:[["Item","Stock","Reorder level"],["Bolt",40,50],["Nut",90,50]],q:[FQ("Show “Reorder” if stock B2 is below reorder level C2, otherwise “OK”.",["IF(B2<C2,\"REORDER\",\"OK\")"]),MC("Which operator means “not equal to”?",["<>","!=","=="])]}]
+};
+D.intermediate.I={
+ fin:[{t:"NPV & IRR",s:"NPV discounts future cash flows to today’s value; IRR returns the rate at which NPV is zero. Excel’s NPV treats the first flow as one period away.",f:"=NPV(8%,B3:B6)+B2\n=IRR(B2:B6)",x:"Add the initial investment outside NPV because it happens today.",p:"Use XNPV and XIRR when cash flows have irregular dates.",tb:[["Year","Cash flow"],[0,-1000],[1,300],[2,400],[3,500],[4,300]],q:[FQ("Return the IRR of the cash flows in B2:B6.",["IRR(B2:B6)"]),MC("Which function handles irregular dates?",["XNPV","SUM","COUNT"])]}],
+ hr:[{t:"Tenure & leave",s:"DATEDIF returns whole years, months or days between two dates. NETWORKDAYS counts working days, optionally skipping holidays.",f:"=DATEDIF(B2,TODAY(),\"Y\")\n=NETWORKDAYS(B2,C2,F2:F10)",x:"The unit “Y”, “M” or “D” sets what DATEDIF returns.",p:"Keep public holidays in a named range to reuse across workbooks.",tb:[["Name","Joined"],["Aina","1 Mar 2020"],["Raj","15 Jul 2018"]],q:[FQ("Return whole years between B2 and today.",["DATEDIF(B2,TODAY(),\"Y\")"]),MC("NETWORKDAYS counts…",["Working days","Calendar days","Weekends only"])]}],
+ ops:[{t:"Warehouse totals",s:"SUMIFS and COUNTIFS total quantities by warehouse, supplier or status. Combine with XLOOKUP to pull unit costs from a price list.",f:"=SUMIFS(C2:C5,A2:A5,\"KL\")\n=XLOOKUP(B2,F2:F20,G2:G20)",x:"Use cell references as criteria so a dropdown can switch warehouses.",p:"Convert source data to a Table so formulas always cover new rows.",tb:[["Warehouse","Item","Qty"],["KL","Bolt",40],["JB","Nut",90],["KL","Nut",60],["PG","Bolt",30]],q:[FQ("Total Qty (C2:C5) where Warehouse (A2:A5) is KL.",["SUMIFS(C2:C5,A2:A5,\"KL\")","SUMIF(A2:A5,\"KL\",C2:C5)"]),MC("Which keeps totals right when new rows are added?",["Converting the data to a Table","Typing totals manually","Merging cells"])]}]
+};
+D.advanced.I={
+ fin:[{t:"Model checks & sensitivity",s:"Reliable models separate inputs, calculations and outputs, colour-code inputs and include checks. Data Tables and Scenario Manager test assumptions.",f:"=ROUND(Assets-Liabilities-Equity,2)=0\nData → What-If → Data Table",x:"A balance check that shows TRUE or FALSE catches broken links early.",p:"Ctrl+[ jumps to a formula’s precedents; Ctrl+] to its dependents.",tb:null,q:[MC("Which shortcut jumps to a formula’s precedents?",["Ctrl+[","Ctrl+]","Ctrl+Z"]),MC("Best practice for model inputs?",["Keep them separate and colour-coded","Hardcode them inside formulas","Hide them on random sheets"])]}],
+ hr:[{t:"People analytics",s:"UNIQUE and COUNTIFS summarise headcount and attrition by team. PivotTables with slicers make a live workforce dashboard.",f:"=UNIQUE(A2:A20)\n=COUNTIFS(A2:A20,E2,C2:C20,\"Left\")/COUNTIFS(A2:A20,E2)",x:"Attrition = leavers ÷ average headcount for the period.",p:"Aggregate or mask personal data before sharing dashboards.",tb:null,q:[FQ("Count distinct departments in A2:A20.",["COUNTA(UNIQUE(A2:A20))","ROWS(UNIQUE(A2:A20))"]),MC("Best tool for turnover by department and month?",["PivotTable","Spell check","Freeze Panes"])]}],
+ ops:[{t:"Forecasting",s:"FORECAST.LINEAR predicts a value from a linear trend. FORECAST.ETS handles seasonality. Compare forecasts with actuals every period.",f:"=FORECAST.LINEAR(6,B2:B6,A2:A6)\n=FORECAST.ETS(A7,B2:B6,A2:A6)",x:"Arguments: new x (month 6), known y values, known x values.",p:"Track forecast error (MAPE) to see whether the model can be trusted.",tb:[["Month","Demand"],[1,100],[2,110],[3,125],[4,130],[5,145]],q:[FQ("Forecast month 6 from demand B2:B6 over months A2:A6.",["FORECAST.LINEAR(6,B2:B6,A2:A6)","FORECAST(6,B2:B6,A2:A6)"]),MC("Which function handles seasonality?",["FORECAST.ETS","SUM","MIN"])]}]
+};
+const IND={gen:"General",fin:"Finance",hr:"HR",ops:"Operations"};
+for(const k in D){D[k].L.forEach((l,i)=>l.id=k+i);for(const g in D[k].I)D[k].I[g].forEach((l,i)=>{l.id=k+g+i;l.g=g})}
+const PL={n:"Placement",L:[{t:"Placement test",tb:null,q:[MC("In =B2*$E$1, what does the $ do?",["Locks the reference","Adds currency","Divides"]),FQ("Type the formula for the total of B2:B6.",["SUM(B2:B6)"]),MC("Best exact-match lookup in modern Excel?",["XLOOKUP","ROUND","TODAY"]),FQ("Count cells in A2:A9 equal to “Yes”.",["COUNTIF(A2:A9,\"YES\")"]),MC("Which function spills many results from one formula?",["FILTER","SUM","IF"]),MC("LET is used to…",["Name values inside a formula","Protect a sheet","Insert a chart"])]}]};
+const vis=k=>D[k].L.concat(P.ind&&P.ind!=="gen"?D[k].I[P.ind]||[]:[]);
+const done=k=>vis(k).filter(l=>P[l.id]!==undefined).length;
+function placeEnd(){const s=S.sc,k=s<=2?"beginner":s<=4?"intermediate":"advanced";
+  app.innerHTML=`<h1>🎯 ${s}/6</h1><p>Recommended level: <b>${D[k].e} ${D[k].n}</b></p><p class="mut">${s<=2?"Start with the foundations and build up.":s<=4?"You know the basics. Level up your analysis skills.":"Strong skills. Go deep with modern Excel and Power tools."}</p><button class="btn" id="go">Start ${D[k].n}</button> <button class="back" id="hm">Home</button>`;
+  $("#go").onclick=()=>go({v:"level",k});$("#hm").onclick=()=>go({v:"home"})}
+let P={};try{P=JSON.parse(localStorage.getItem("xlp")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("xlp",JSON.stringify(P))}catch(e){}};
+const nz=s=>s.toUpperCase().replace(/[“”]/g,'"').replace(/\s+/g,"").replace(/^=/,"").replace(/\$/g,"").replace(/;/g,",");
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const col=n=>String.fromCharCode(65+n);
+const grid=t=>t?`<div class="g"><table><tr><th></th>${t[0].map((_,c)=>`<th>${col(c)}</th>`).join("")}</tr>${t.map((r,i)=>`<tr><th>${i+1}</th>${r.map(c=>`<td${i?"":' class="hd"'}>${c}</td>`).join("")}</tr>`).join("")}</table></div>`:"";
+let S={v:"home"};
+function go(o){S=o;render();scrollTo(0,0)}
+function render(){
+  const ind=P.ind||"gen";
+  if(S.v==="home"){
+    app.innerHTML=`<h1>📊 ExcelPro</h1><p class="mut">Practical Excel for working professionals. Pick your focus and level.</p><div class="chips">${Object.keys(IND).map(g=>`<button class="chip${ind===g?" on":""}" data-g="${g}">${IND[g]}</button>`).join("")}</div><button class="card" id="pl"><div class="row"><span class="em">🎯</span><div class="grow"><b>Not sure where to start?</b><div class="mut">Take the 6-question placement test.</div></div></div></button>`+Object.keys(D).map(k=>{const d=D[k],n=vis(k).length,c=done(k);return`<button class="card" data-k="${k}"><div class="row"><span class="em">${d.e}</span><div class="grow"><h2>${d.n} <span class="pill">${c}/${n}</span></h2><div class="mut">${d.d}</div><div class="bar"><i style="width:${c/n*100}%"></i></div></div></div></button>`}).join("")+`<p class="mut">Formulas use commas as separators. If your Excel uses semicolons, swap them.</p><button class="back" id="rs">Reset progress</button>`;
+    app.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>go({v:"level",k:b.dataset.k}));
+    app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{P.ind=b.dataset.g;save();render()});
+    $("#pl").onclick=()=>go({v:"lesson",k:"place",i:0,st:1,sc:0,fb:null,tries:0});
+    $("#rs").onclick=()=>{if(confirm("Reset all progress?")){P={ind:P.ind};save();render()}};
+  }else if(S.v==="level"){
+    const d=D[S.k];
+    app.innerHTML=`<button class="back" id="bk">← All levels</button><h1>${d.e} ${d.n}</h1><p class="mut">${d.d}${ind!=="gen"?` Focus: ${IND[ind]}.`:""}</p>`+vis(S.k).map((l,i)=>`<button class="card" data-i="${i}"><div class="row"><div class="grow"><b>${i+1}. ${l.t}</b> ${l.g?`<span class="pill">${IND[l.g]}</span>`:""}</div>${P[l.id]!==undefined?`<span class="pill">✓ ${P[l.id]}/${l.q.length}</span>`:""}</div></button>`).join("");
+    $("#bk").onclick=()=>go({v:"home"});app.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>go({v:"lesson",k:S.k,i:+b.dataset.i,st:0,sc:0,fb:null,tries:0}));
+  }else lesson();
+}
+function lesson(){
+  const pl=S.k==="place",d=pl?PL:D[S.k],l=pl?PL.L[0]:vis(S.k)[S.i],n=l.q.length,back=`<button class="back" id="bk">← ${pl?"Home":d.n}</button>`;
+  if(S.st===0){
+    app.innerHTML=`${back}<h2>${S.i+1}. ${l.t} ${l.g?`<span class="pill">${IND[l.g]}</span>`:""}</h2><p>${l.s}</p><code class="fx">${esc(l.f)}</code><p>${l.x}</p>${grid(l.tb)}<div class="tip">💡 <b>Pro tip:</b> ${l.p}</div><button class="btn" id="nx">Start quiz (${n} questions)</button>`;
+    $("#nx").onclick=()=>go({...S,st:1,fb:null,tries:0});
+  }else if(S.st<=n){
+    const q=l.q[S.st-1],fin=S.fb&&(S.fb.ok||S.fb.show);
+    if(!S.opts&&q.t==="mc")S.opts=shuffle(q.o);
+    let body=`<p><b>Question ${S.st}/${n}</b></p><p>${q.q}</p>${S.st===1||q.t==="f"?grid(l.tb):""}`;
+    if(q.t==="mc")body+=S.opts.map(o=>`<button class="opt${fin?(o===q.o[0]?" ok":o===S.pick?" no":""):""}" data-o="${esc(o)}">${esc(o)}</button>`).join("");
+    else body+=`<input type="text" id="in" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="=…" ${fin?"disabled":""} value="${S.val?esc(S.val):""}">`+(fin?"":`<button class="btn" id="ck">Check</button>`);
+    if(S.fb)body+=`<div class="fb ${S.fb.ok?"ok":"no"}">${S.fb.msg}</div>`;
+    if(fin)body+=`<button class="btn" id="nx">${S.st<n?"Next":"Finish"}</button>`;
+    app.innerHTML=back+body;
+    const fn=correct=>{S.fb=correct?{ok:true,msg:"✓ Correct!"}:{ok:false,show:true,msg:"✗ Answer: "+(q.t==="mc"?q.o[0]:"="+q.ok[0])};if(correct)S.sc++;render()};
+    if(q.t==="mc"&&!fin)app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{S.pick=b.dataset.o.replace(/&lt;/g,"<").replace(/&amp;/g,"&");fn(S.pick===q.o[0])});
+    if(q.t==="f"&&!fin){const chk=()=>{S.val=$("#in").value;if(!S.val.trim())return;if(q.ok.map(nz).includes(nz(S.val)))fn(true);else if(++S.tries>=2)fn(false);else{S.fb={ok:false,msg:"Not quite. Check the example and try again (1 try left)."};render()}};$("#ck").onclick=chk;$("#in").onkeydown=e=>{if(e.key==="Enter")chk()};if(S.fb)$("#in").focus()}
+    if(fin)$("#nx").onclick=()=>go({...S,st:S.st+1,fb:null,tries:0,opts:null,pick:null,val:""});
+  }else{
+    if(pl)return placeEnd();P[l.id]=Math.max(S.sc,P[l.id]||0);save();
+    const nextI=S.i+1<vis(S.k).length;
+    app.innerHTML=`<h1>${S.sc===n?"🎉":"👍"} ${S.sc}/${n} correct</h1><p class="mut">${S.sc===n?"Perfect. Lesson complete.":"Lesson saved. Retry any time to improve your score."}</p>${nextI?`<button class="btn" id="nl">Next lesson</button> `:""}<button class="btn alt" id="rt">Retry</button> <button class="back" id="bk">← ${d.n}</button>`;
+    if(nextI)$("#nl").onclick=()=>go({v:"lesson",k:S.k,i:S.i+1,st:0,sc:0,fb:null,tries:0});
+    $("#rt").onclick=()=>go({v:"lesson",k:S.k,i:S.i,st:1,sc:0,fb:null,tries:0});
+  }
+  const b=$("#bk");if(b)b.onclick=()=>pl?go({v:"home"}):go({v:"level",k:S.k});
+}
+render();
+</script>
+</body>
+</html>
